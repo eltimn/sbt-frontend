@@ -1,6 +1,7 @@
 lazy val commonSettings: Seq[Setting[_]] = Seq(
   git.baseVersion in ThisBuild := "0.1.0",
-  organization in ThisBuild := "com.eltimn"
+  organization in ThisBuild := "com.eltimn",
+  git.uncommittedSignifier in ThisBuild := None
 )
 
 lazy val sbt_frontend = (project in file("."))
@@ -35,7 +36,8 @@ lazy val sbt_frontend = (project in file("."))
     },
     homepage := Some(url("https://github.com/eltimn/sbt-frontend")),
     licenses := Seq(("MIT", url("https://opensource.org/licenses/MIT"))),
-    publishTo := Some("eltimn-maven" at "https://api.bintray.com/maven/eltimn/maven/sbt-frontend/;publish=1")
+    bintrayRepository := "maven",
+    bintrayOrganization := Some("eltimn")
   )
 
 
