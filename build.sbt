@@ -36,7 +36,6 @@ lazy val sbt_frontend = (project in file("."))
     },
     homepage := Some(url("https://github.com/eltimn/sbt-frontend")),
     licenses := Seq(("MIT", url("https://opensource.org/licenses/MIT"))),
-    bintrayRepository := "maven",
     bintrayOrganization := Some("eltimn")
   )
 
