@@ -1,0 +1,6 @@
+> gulp default
+$ exists .frontend/node/node
+$ exists .frontend/node/node_modules/npm/bin/npm-cli.js
+$ exists .frontend/bower_components/jquery/dist/jquery.js
+$ exists .frontend/test.txt
+> gulp default

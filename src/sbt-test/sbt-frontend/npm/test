@@ -1,0 +1,3 @@
+> npm run check
+$ exists test.txt
+$ exists node_modules/jshint/bin/jshint
