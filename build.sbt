@@ -10,7 +10,6 @@ lazy val sbt_frontend = (project in file("."))
     sbtPlugin := true,
     name := "sbt-frontend",
     description := "sbt plugin for managing frontend code (node and npm, grunt, gulp, bower, etc.)",
-    licenses := Seq("MIT License" -> url("https://github.com/sbt/sbt-assembly/blob/master/LICENSE")),
     scalacOptions := Seq("-deprecation", "-unchecked"),
     libraryDependencies ++= Seq(
       "com.github.eirslett" %% "sbt-slf4j"            % "0.1",
@@ -20,7 +19,23 @@ lazy val sbt_frontend = (project in file("."))
     publishArtifact in (Compile, packageBin) := true,
     publishArtifact in (Test, packageBin) := false,
     publishArtifact in (Compile, packageDoc) := false,
-    publishArtifact in (Compile, packageSrc) := true
+    publishArtifact in (Compile, packageSrc) := true,
+    pomExtra := {
+      <scm>
+        <url>git@github.com:eltimn/sbt-frontend.git</url>
+        <connection>scm:git:git@github.com:eltimn/sbt-frontend.git</connection>
+      </scm>
+      <developers>
+        <developer>
+          <id>eltimn</id>
+          <name>Tim Nelson</name>
+          <url>https://github.com/eltimn</url>
+        </developer>
+      </developers>
+    },
+    homepage := Some(url("https://github.com/eltimn/sbt-frontend")),
+    licenses := Seq(("MIT", url("https://opensource.org/licenses/MIT"))),
+    publishTo := Some("eltimn-maven" at "https://api.bintray.com/maven/eltimn/maven/sbt-frontend/;publish=1")
   )
 
 
