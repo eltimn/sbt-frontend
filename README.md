@@ -86,15 +86,7 @@ References
 ----------
 [testing-sbt-plugins](http://eed3si9n.com/testing-sbt-plugins)
 
-TODO
-----
+License
+-------
 
-* add to travis
-* generate helper task
-* documentation
-* add to sbt-plugin-releases
-
-* proxy - http://www.scala-sbt.org/0.13/docs/Setup-Notes.html
-* command completion
-
-* run node script directly
+Published under [The MIT License]("https://opensource.org/licenses/MIT")
