@@ -1,3 +1,3 @@
-> show nodeInstallDirectory
-$ exists node/node
-$ exists node/node_modules/npm/bin/npm-cli.js
+> nodeInstall
+$ exists .frontend/node/node
+$ exists .frontend/node/node_modules/npm/bin/npm-cli.js

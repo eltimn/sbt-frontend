@@ -1,4 +1,5 @@
 {
+  "private": true,
   "devDependencies": {
     "grunt": "latest",
     "grunt-cli": "latest"

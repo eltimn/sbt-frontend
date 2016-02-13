@@ -1,4 +1,5 @@
 {
+  "private": true,
   "devDependencies": {
     "bower": "latest",
     "gulp": "latest"
