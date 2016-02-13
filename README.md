@@ -32,7 +32,7 @@ Upon loading SBT, Node and npm with be automatically installed locally. Also, if
 
 The plugin makes available the following `InputTask`s. Note that you must first install any apps you want to use with `npm install`.
 
-| `InputTask`   | Description   |
+| Task          | Description   |
 | ------------- | ------------- |
 | nodeInstall   | Installs Node and npm |
 | npm           | Runs npm commands |

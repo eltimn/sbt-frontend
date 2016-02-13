@@ -11,7 +11,7 @@ cache:
 
 # This is an sbt plugin, so this section is for demo purpose
 scala:
-   - 2.11.7
+   - 2.10.4
 
 jdk:
   - oraclejdk8
