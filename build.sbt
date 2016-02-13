@@ -1,7 +1,6 @@
 lazy val commonSettings: Seq[Setting[_]] = Seq(
   git.baseVersion in ThisBuild := "0.1.0",
-  organization in ThisBuild := "com.eltimn",
-  git.uncommittedSignifier in ThisBuild := None
+  organization in ThisBuild := "com.eltimn"
 )
 
 lazy val sbt_frontend = (project in file("."))

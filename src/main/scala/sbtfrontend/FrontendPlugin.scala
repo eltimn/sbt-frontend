@@ -3,8 +3,6 @@ package sbtfrontend
 import sbt._
 import sbt.Keys._
 
-import scala.collection.JavaConverters._
-
 import org.slf4j.impl.StaticLoggerBinder
 import net.liftweb.common.{ Failure, Full }
 import com.github.eirslett.maven.plugins.frontend.lib.{
@@ -19,10 +17,6 @@ object Defaults {
 }
 
 object FrontendPlugin extends AutoPlugin {
-  // override def requires = plugins.JvmPlugin
-  // override def trigger = allRequirements
-
-  private val rememberDirectory = settingKey[File]("Where we save files to remember")
 
   object autoImport {
     val nodeInstall = taskKey[Unit]("Installs node.js and npm locally.")
@@ -50,10 +44,9 @@ object FrontendPlugin extends AutoPlugin {
       import FrontendKeys._
 
       Seq(
-        rememberDirectory := baseDirectory.value / ".frontend",
         nodeVersion := Defaults.nodeVersion,
         npmVersion := Defaults.npmVersion,
-        nodeInstallDirectory := baseDirectory.value,
+        nodeInstallDirectory := baseDirectory.value / ".frontend",
         nodeWorkingDirectory := baseDirectory.value,
         nodeDownloadRoot := Defaults.nodeDownloadRoot,
         npmDownloadRoot := Defaults.npmDownloadRoot,
@@ -103,7 +96,7 @@ object FrontendPlugin extends AutoPlugin {
             def runIfUpdated(file: File)(func: => Unit): Unit = {
               val name = file.getName
               val fileDigest = FrontendUtils.digest(file)
-              val digestFile = rememberDirectory.value / s"${name}.md5"
+              val digestFile = nodeInstallDirectory.value / s"${name}.md5"
               val savedDigest: Option[String] = {
                 if (digestFile.exists) {
                   Some(IO.read(digestFile))
