@@ -91,4 +91,4 @@ References
 License
 -------
 
-Published under [The MIT License]("https://opensource.org/licenses/MIT")
+Published under [The MIT License](https://opensource.org/licenses/MIT)
