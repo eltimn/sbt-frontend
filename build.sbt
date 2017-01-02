@@ -13,7 +13,7 @@ lazy val sbt_frontend = (project in file("."))
     scalacOptions := Seq("-deprecation", "-unchecked"),
     libraryDependencies ++= Seq(
       "com.github.eirslett" %% "sbt-slf4j"            % "0.1",
-      "com.github.eirslett" %  "frontend-plugin-core" % "0.0.27",
+      "com.github.eirslett" %  "frontend-plugin-core" % "1.3",
       "net.liftweb"         %% "lift-common"          % "2.6.3"
     ),
     publishArtifact in (Compile, packageBin) := true,

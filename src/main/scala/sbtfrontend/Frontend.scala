@@ -10,6 +10,8 @@ import com.github.eirslett.maven.plugins.frontend.lib.{
 object Frontend {
   import FrontendPlugin.autoImport.FrontendKeys._
 
+  def environmentVariables: Map[String, String] = Map()
+
   private def tryo[T](f: => T): Box[T] = {
     try {
       Full(f)
@@ -27,38 +29,44 @@ object Frontend {
     proxies: Seq[ProxyConfig.Proxy]
   ): Box[Unit] = {
     tryo {
-      factory
-        .getNodeAndNPMInstaller(new ProxyConfig(proxies.asJava))
-        .install(
-          nodeVersion,
-          npmVersion,
-          nodeDownloadRoot,
-          npmDownloadRoot
-        )
+      val proxyConfig: ProxyConfig =
+        new ProxyConfig(proxies.asJava)
+
+      factory.getNodeInstaller(proxyConfig)
+        .setNodeVersion(nodeVersion)
+        .setNodeDownloadRoot(nodeDownloadRoot)
+        .setNpmVersion(npmVersion)
+        .install()
+
+      factory.getNPMInstaller(proxyConfig)
+        .setNodeVersion(nodeVersion)
+        .setNpmVersion(npmVersion)
+        .setNpmDownloadRoot(npmDownloadRoot)
+        .install()
     }
   }
 
   def npm(factory: FrontendPluginFactory, arguments: String, proxies: Seq[ProxyConfig.Proxy]): Box[Unit] =
-    tryo { factory.getNpmRunner(new ProxyConfig(proxies.asJava)).execute(arguments) }
+    tryo { factory.getNpmRunner(new ProxyConfig(proxies.asJava), null).execute(arguments, environmentVariables.asJava) }
 
   def bower(factory: FrontendPluginFactory, arguments: String, proxies: Seq[ProxyConfig.Proxy]): Box[Unit] =
-    tryo { factory.getBowerRunner(new ProxyConfig(proxies.asJava)).execute(arguments) }
+    tryo { factory.getBowerRunner(new ProxyConfig(proxies.asJava)).execute(arguments, environmentVariables.asJava) }
 
   def grunt(factory: FrontendPluginFactory, arguments: String): Box[Unit] =
-    tryo { factory.getGruntRunner().execute(arguments) }
+    tryo { factory.getGruntRunner().execute(arguments, environmentVariables.asJava) }
 
   def gulp(factory: FrontendPluginFactory, arguments: String): Box[Unit] =
-    tryo { factory.getGulpRunner().execute(arguments) }
+    tryo { factory.getGulpRunner().execute(arguments, environmentVariables.asJava) }
 
   def jspm(factory: FrontendPluginFactory, arguments: String): Box[Unit] =
-    tryo { factory.getJspmRunner().execute(arguments) }
+    tryo { factory.getJspmRunner().execute(arguments, environmentVariables.asJava) }
 
   def karma(factory: FrontendPluginFactory, arguments: String): Box[Unit] =
-    tryo { factory.getKarmaRunner().execute(arguments) }
+    tryo { factory.getKarmaRunner().execute(arguments, environmentVariables.asJava) }
 
   def webpack(factory: FrontendPluginFactory, arguments: String): Box[Unit] =
-    tryo { factory.getWebpackRunner().execute(arguments) }
+    tryo { factory.getWebpackRunner().execute(arguments, environmentVariables.asJava) }
 
   def ember(factory: FrontendPluginFactory, arguments: String): Box[Unit] =
-    tryo { factory.getEmberRunner().execute(arguments) }
+    tryo { factory.getEmberRunner().execute(arguments, environmentVariables.asJava) }
 }

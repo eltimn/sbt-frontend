@@ -6,14 +6,15 @@ import sbt.Keys._
 import org.slf4j.impl.StaticLoggerBinder
 import net.liftweb.common.{ Failure, Full }
 import com.github.eirslett.maven.plugins.frontend.lib.{
-  FrontendPluginFactory, NodeAndNPMInstaller, ProxyConfig
+  FrontendPluginFactory, NodeInstaller, NPMInstaller, ProxyConfig
 }
 
 object Defaults {
-  val nodeVersion = "v4.2.6"
-  val npmVersion = "2.14.16"
-  val nodeDownloadRoot = NodeAndNPMInstaller.DEFAULT_NODEJS_DOWNLOAD_ROOT
-  val npmDownloadRoot = NodeAndNPMInstaller.DEFAULT_NPM_DOWNLOAD_ROOT
+  val nodeVersion = "v6.9.2"
+  val npmVersion = "3.10.9"
+  val nodeDownloadRoot = NodeInstaller.DEFAULT_NODEJS_DOWNLOAD_ROOT
+  val npmDownloadRoot = NPMInstaller.DEFAULT_NPM_DOWNLOAD_ROOT
+  val npmRegistryUrl: Option[String] = None
 }
 
 object FrontendPlugin extends AutoPlugin {
@@ -37,6 +38,7 @@ object FrontendPlugin extends AutoPlugin {
       val nodeWorkingDirectory = settingKey[File](s"The base directory for running node and npm. Default: baseDirectory")
       val nodeDownloadRoot = settingKey[String](s"Where to download Node.js binary from. Default: ${Defaults.nodeDownloadRoot}")
       val npmDownloadRoot = settingKey[String](s"Where to download NPM binary from. Default: ${Defaults.npmDownloadRoot}")
+      val npmRegistryUrl = settingKey[Option[String]](s"NPM registry URL. Default: ${Defaults.npmRegistryUrl}")
       val nodeProxies = settingKey[Seq[ProxyConfig.Proxy]]("Seq of proxies for downloader.")
     }
 
@@ -50,6 +52,7 @@ object FrontendPlugin extends AutoPlugin {
         nodeWorkingDirectory := baseDirectory.value,
         nodeDownloadRoot := Defaults.nodeDownloadRoot,
         npmDownloadRoot := Defaults.npmDownloadRoot,
+        npmRegistryUrl := Defaults.npmRegistryUrl,
         nodeProxies := Nil,
         frontendFactory := {
           new FrontendPluginFactory(nodeWorkingDirectory.value, nodeInstallDirectory.value)
