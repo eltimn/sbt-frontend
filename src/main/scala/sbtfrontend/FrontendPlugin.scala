@@ -3,6 +3,9 @@ package sbtfrontend
 import sbt._
 import sbt.Keys._
 
+import java.util.jar.JarFile
+import scala.util.control.NonFatal
+
 import org.slf4j.impl.StaticLoggerBinder
 import net.liftweb.common.{ Failure, Full }
 import com.github.eirslett.maven.plugins.frontend.lib.{
@@ -29,6 +32,7 @@ object FrontendPlugin extends AutoPlugin {
     val karma = inputKey[Unit]("Runs karma commands")
     val webpack = inputKey[Unit]("Runs webpack commands")
     val ember = inputKey[Unit]("Runs ember commands")
+    val webjars = taskKey[Unit]("Extract web jar assets")
 
     object FrontendKeys {
       val frontendFactory = settingKey[FrontendPluginFactory]("The FrontendFactory instance")
@@ -79,6 +83,14 @@ object FrontendPlugin extends AutoPlugin {
         karma <<= FrontendInputTask(karma, Frontend.karma _),
         webpack <<= FrontendInputTask(webpack, Frontend.webpack _),
         ember <<= FrontendInputTask(ember, Frontend.ember _),
+        webjars := {
+          for {
+            file <- (dependencyClasspath in Compile).value.map(_.data)
+            jar <- tryo(new JarFile(file))
+          } {
+            Frontend.extractWebjarAssets(jar, target.value / "webjars")
+          }
+        },
         onLoad in Global := {
           val onLoadFunc = (s: State) => {
             StaticLoggerBinder.sbtLogger = s.log
@@ -147,6 +159,7 @@ object FrontendPlugin extends AutoPlugin {
 
             s
           }
+
           val previous = (onLoad in Global).value
           onLoadFunc compose previous
         }
@@ -158,25 +171,13 @@ object FrontendPlugin extends AutoPlugin {
   import autoImport._
 
   override def projectSettings = frontendSettings
-    // inConfig(Compile)(frontendSettings) ++
-    // inConfig(Test)(frontendSettings)
 
-  // override val globalSettings: Seq[Def.Setting[_]] = Seq(
-  //   onLoad in Global := (onLoad in Global).value andThen { s =>
-  //     import FrontendKeys._
-  //     StaticLoggerBinder.sbtLogger = s.log
-  //     Frontend.nodeInstall(
-  //       frontendFactory.value,
-  //       nodeVersion.value,
-  //       npmVersion.value,
-  //       nodeDownloadRoot.value,
-  //       npmDownloadRoot.value,
-  //       nodeProxies.value
-  //     ) match {
-  //       case Failure(msg, Full(e), _) => throw e
-  //       case _ =>
-  //     }
-  //     s
-  //   }
-  // )
+  private def tryo[T](f: => T): Option[T] = {
+    try {
+      Option(f)
+    } catch {
+      case NonFatal(e) =>
+        None
+    }
+  }
 }

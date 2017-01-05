@@ -1,6 +1,9 @@
 package sbtfrontend
 
+import sbt._
 import scala.collection.JavaConverters._
+import java.io.File
+import java.util.jar.JarFile
 
 import net.liftweb.common._
 import com.github.eirslett.maven.plugins.frontend.lib.{
@@ -69,4 +72,22 @@ object Frontend {
 
   def ember(factory: FrontendPluginFactory, arguments: String): Box[Unit] =
     tryo { factory.getEmberRunner().execute(arguments, environmentVariables.asJava) }
+
+  def extractWebjarAssets(jar: JarFile, dest: File): Unit = {
+    val webjarDir = "META-INF/resources/webjars"
+
+    jar.entries.asScala
+      .filter(e => e.getName.startsWith(webjarDir) && !e.isDirectory)
+      .foreach { entry =>
+        // take out the version number from the path
+        val destParts = entry.getName
+          .stripPrefix(webjarDir)
+          .split('/')
+          .filter(_.nonEmpty)
+
+        val destPath = (destParts.take(1) ++ destParts.drop(2)).mkString("/")
+        val destFile = dest / destPath
+        IO.transfer(jar.getInputStream(entry), destFile)
+      }
+  }
 }

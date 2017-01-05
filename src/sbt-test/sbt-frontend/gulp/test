@@ -1,3 +1,5 @@
 > gulp default
 $ exists test.txt
 
+> webjars
+$ exists target/webjars/jquery/dist/jquery.js

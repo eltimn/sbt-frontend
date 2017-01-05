@@ -36,7 +36,7 @@ The plugin makes available the following `InputTask`s. Note that you must first 
 
 | Task          | Description   |
 | ------------- | ------------- |
-| nodeInstall   | Installs Node and npm |
+| nodeInstall   | Installs Node and npm. Runs automatically at startup. |
 | npm           | Runs npm commands |
 | bower         | Runs bower commands |
 | grunt         | Runs grunt commands |
@@ -45,6 +45,7 @@ The plugin makes available the following `InputTask`s. Note that you must first 
 | karma         | Runs karma commands |
 | webpack       | Runs webpack commands |
 | ember         | Runs ember commands |
+| webjars       | Extracts webjar assets from classpath jars |
 
 Since these are `InputTask`s you can call them with command line arguments. E.g.:
 
