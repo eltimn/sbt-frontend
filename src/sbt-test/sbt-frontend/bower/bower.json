@@ -1,6 +1,6 @@
 {
   "name": "lift-frontend",
-  "license": "MIT",
+  "private": "true",
   "moduleType": [
     "globals"
   ],

@@ -16,5 +16,10 @@ pomExtra := {
 
 publishArtifact in Test := false
 homepage := Some(url("https://github.com/eltimn/sbt-frontend"))
-licenses := Seq(("MIT", url("https://opensource.org/licenses/MIT")))
+licenses := Seq(("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.txt")))
 bintrayOrganization := Some("eltimn")
+
+publishArtifact in (Compile, packageBin) := true
+publishArtifact in (Test, packageBin) := false
+publishArtifact in (Compile, packageDoc) := false
+publishArtifact in (Compile, packageSrc) := true

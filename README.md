@@ -91,4 +91,4 @@ References
 
 License
 -------
-Published under [The MIT License](https://opensource.org/licenses/MIT)
+Published under [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
