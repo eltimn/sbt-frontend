@@ -62,6 +62,8 @@ val myTask = taskKey[Unit]("My task")
 myTask := gulp.toTask(" build").value
 ```
 
+This is equivalent to ```gulp build```.
+
 The following `FrontendKeys` are also available:
 
 | Setting              | Description   |

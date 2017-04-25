@@ -1,2 +1,4 @@
 > show nodeInstallDirectory
 $ exists bower_components/jquery/dist/jquery.js
+> frontendClean
+$ absent bower_components

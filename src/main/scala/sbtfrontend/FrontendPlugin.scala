@@ -13,8 +13,8 @@ import com.github.eirslett.maven.plugins.frontend.lib.{
 }
 
 object Defaults {
-  val nodeVersion = "v6.9.2"
-  val npmVersion = "3.10.9"
+  val nodeVersion = "v6.10.1"
+  val npmVersion = "3.10.10"
   val nodeDownloadRoot = NodeInstaller.DEFAULT_NODEJS_DOWNLOAD_ROOT
   val npmDownloadRoot = NPMInstaller.DEFAULT_NPM_DOWNLOAD_ROOT
   val npmRegistryUrl: Option[String] = None
@@ -33,12 +33,13 @@ object FrontendPlugin extends AutoPlugin {
     val webpack = inputKey[Unit]("Runs webpack commands")
     val ember = inputKey[Unit]("Runs ember commands")
     val webjars = taskKey[Unit]("Extract web jar assets")
+    val frontendClean = taskKey[Unit]("Clean sbt-frontend dependencies")
 
     object FrontendKeys {
       val frontendFactory = settingKey[FrontendPluginFactory]("The FrontendFactory instance")
       val nodeVersion = settingKey[String](s"The version of Node.js to install. Default: ${Defaults.nodeVersion}")
       val npmVersion = settingKey[String](s"The version of NPM to install. Default: ${Defaults.npmVersion}")
-      val nodeInstallDirectory = settingKey[File](s"The base directory for installing node and npm. Default: baseDirectory")
+      val nodeInstallDirectory = settingKey[File](s"The base directory for installing node and npm. Default: baseDirectory/.frontend")
       val nodeWorkingDirectory = settingKey[File](s"The base directory for running node and npm. Default: baseDirectory")
       val nodeDownloadRoot = settingKey[String](s"Where to download Node.js binary from. Default: ${Defaults.nodeDownloadRoot}")
       val npmDownloadRoot = settingKey[String](s"Where to download NPM binary from. Default: ${Defaults.npmDownloadRoot}")
@@ -90,6 +91,11 @@ object FrontendPlugin extends AutoPlugin {
           } {
             Frontend.extractWebjarAssets(jar, target.value / "webjars")
           }
+        },
+        frontendClean := {
+          IO.delete(nodeInstallDirectory.value)
+          IO.delete(nodeWorkingDirectory.value / "bower_components")
+          IO.delete(nodeWorkingDirectory.value / "npm_modules")
         },
         onLoad in Global := {
           val onLoadFunc = (s: State) => {

@@ -1,3 +1,6 @@
 > nodeInstall
 $ exists .frontend/node/node
 $ exists .frontend/node/node_modules/npm/bin/npm-cli.js
+> frontendClean
+$ absent .frontend
+$ absent node_modules

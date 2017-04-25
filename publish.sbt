@@ -1,5 +1,3 @@
-// bintrayReleaseOnPublish in ThisBuild := false
-
 pomExtra := {
   <scm>
     <url>git@github.com:eltimn/sbt-frontend.git</url>
