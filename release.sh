@@ -8,7 +8,11 @@ if [ -n "$1" ]; then
   # generate version file
   echo "git.baseVersion := \"${VERSION}\"" > version.sbt
 
+  # replace version in readme
+  sed -i -e 's/addSbtPlugin(\"com.eltimn\" \% \"sbt-frontend\" \% \".*\")/addSbtPlugin(\"com.eltimn\" \% \"sbt-frontend\" \% "'$VERSION'")/g' README.md
+
   # git commit and tag
+  git add README.md
   git add version.sbt
   git commit -m "Release v${VERSION}"
   git tag v${VERSION}
