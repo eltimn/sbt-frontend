@@ -3,6 +3,8 @@ sbt-frontend
 
 [![Build Status](https://travis-ci.org/eltimn/sbt-frontend.svg?branch=master)](https://travis-ci.org/eltimn/sbt-frontend)
 
+[ ![Download](https://api.bintray.com/packages/eltimn/sbt-plugins/sbt-frontend/images/download.svg) ](https://bintray.com/eltimn/sbt-plugins/sbt-frontend/_latestVersion)
+
 [SBT](http://www.scala-sbt.org/) plugin for managing frontend code (node and npm, grunt, gulp, bower, etc.)
 
 SBT version of [frontend-maven-plugin](https://github.com/eirslett/frontend-maven-plugin).
