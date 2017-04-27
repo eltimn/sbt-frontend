@@ -3,8 +3,6 @@ sbt-frontend
 
 [![Build Status](https://travis-ci.org/eltimn/sbt-frontend.svg?branch=master)](https://travis-ci.org/eltimn/sbt-frontend)
 
-[![Bintray](https://img.shields.io/bintray/v/eltimn/sbt-plugins/sbt-frontend.svg)](https://bintray.com/eltimn/sbt-plugins/sbt-frontend)
-
 [SBT](http://www.scala-sbt.org/) plugin for managing frontend code (node and npm, grunt, gulp, bower, etc.)
 
 SBT version of [frontend-maven-plugin](https://github.com/eirslett/frontend-maven-plugin).
@@ -20,7 +18,7 @@ Setup
 Add the following to your _project/plugins.sbt_ file:
 
 ```scala
-addSbtPlugin("com.eltimn" % "sbt-frontend" % "0.2.2")
+addSbtPlugin("com.eltimn" % "sbt-frontend" % "0.2.3")
 ```
 
 Enable the plugin in your _build.sbt_ file with:
