@@ -1,6 +1,14 @@
 > nodeInstall
 $ exists .frontend/node/node
 $ exists .frontend/node/node_modules/npm/bin/npm-cli.js
-> frontendClean
+$ exists node_modules/bower/bin/bower
+$ exists bower_components/jquery/dist/jquery.js
+> frontendCleanAll
 $ absent .frontend
 $ absent node_modules
+$ absent bower_components
+> reload
+$ exists .frontend/node/node
+$ exists .frontend/node/node_modules/npm/bin/npm-cli.js
+$ exists node_modules/bower/bin/bower
+$ exists bower_components/jquery/dist/jquery.js

@@ -3,6 +3,8 @@ sbt-frontend
 
 [![Build Status](https://travis-ci.org/eltimn/sbt-frontend.svg?branch=master)](https://travis-ci.org/eltimn/sbt-frontend)
 
+[![Bintray](https://img.shields.io/bintray/v/eltimn/sbt-plugins/sbt-frontend.svg)](https://bintray.com/eltimn/sbt-plugins/sbt-frontend)
+
 [SBT](http://www.scala-sbt.org/) plugin for managing frontend code (node and npm, grunt, gulp, bower, etc.)
 
 SBT version of [frontend-maven-plugin](https://github.com/eirslett/frontend-maven-plugin).
@@ -34,9 +36,8 @@ Upon loading SBT, Node and npm with be automatically installed locally. Also, if
 
 The plugin makes available the following `InputTask`s. Note that you must first install any apps you want to use with `npm install`.
 
-| Task          | Description   |
+| Input Task    | Description   |
 | ------------- | ------------- |
-| nodeInstall   | Installs Node and npm. Runs automatically at startup. |
 | npm           | Runs npm commands |
 | bower         | Runs bower commands |
 | grunt         | Runs grunt commands |
@@ -63,6 +64,14 @@ myTask := gulp.toTask(" build").value
 ```
 
 This is equivalent to ```gulp build```.
+
+### Other Tasks
+
+| Task              | Description   |
+| -------------     | ------------- |
+| nodeInstall       | Installs Node and npm. Runs automatically at startup. |
+| frontendCleanDeps | Remove frontend dependencies (node_modules and bower_components). Must reload project afterwards. |
+| frontendCleanAll  | Remove Node, NPM, and dependencies. Must reload project afterwards. |
 
 The following `FrontendKeys` are also available:
 

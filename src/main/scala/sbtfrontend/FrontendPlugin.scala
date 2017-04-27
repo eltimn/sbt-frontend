@@ -33,7 +33,8 @@ object FrontendPlugin extends AutoPlugin {
     val webpack = inputKey[Unit]("Runs webpack commands")
     val ember = inputKey[Unit]("Runs ember commands")
     val webjars = taskKey[Unit]("Extract web jar assets")
-    val frontendClean = taskKey[Unit]("Clean sbt-frontend dependencies")
+    val frontendCleanDeps = taskKey[Unit]("Remove frontend dependencies. Must reload project afterwards.")
+    val frontendCleanAll = taskKey[Unit]("Remove Node, NPM, and dependencies. Must reload project afterwards.")
 
     object FrontendKeys {
       val frontendFactory = settingKey[FrontendPluginFactory]("The FrontendFactory instance")
@@ -45,6 +46,8 @@ object FrontendPlugin extends AutoPlugin {
       val npmDownloadRoot = settingKey[String](s"Where to download NPM binary from. Default: ${Defaults.npmDownloadRoot}")
       val npmRegistryUrl = settingKey[Option[String]](s"NPM registry URL. Default: ${Defaults.npmRegistryUrl}")
       val nodeProxies = settingKey[Seq[ProxyConfig.Proxy]]("Seq of proxies for downloader.")
+      val npmFile = settingKey[File]("package.json")
+      val bowerFile = settingKey[File]("bower.json")
     }
 
     lazy val frontendSettings: Seq[Def.Setting[_]] = {
@@ -58,6 +61,8 @@ object FrontendPlugin extends AutoPlugin {
         nodeDownloadRoot := Defaults.nodeDownloadRoot,
         npmDownloadRoot := Defaults.npmDownloadRoot,
         npmRegistryUrl := Defaults.npmRegistryUrl,
+        npmFile := nodeWorkingDirectory.value / "package.json",
+        bowerFile := nodeWorkingDirectory.value / "bower.json",
         nodeProxies := Nil,
         frontendFactory := {
           new FrontendPluginFactory(nodeWorkingDirectory.value, nodeInstallDirectory.value)
@@ -92,10 +97,15 @@ object FrontendPlugin extends AutoPlugin {
             Frontend.extractWebjarAssets(jar, target.value / "webjars")
           }
         },
-        frontendClean := {
-          IO.delete(nodeInstallDirectory.value)
+        frontendCleanDeps := {
+          IO.delete(nodeInstallDirectory.value / "bower.json.md5")
+          IO.delete(nodeInstallDirectory.value / "package.json.md5")
           IO.delete(nodeWorkingDirectory.value / "bower_components")
-          IO.delete(nodeWorkingDirectory.value / "npm_modules")
+          IO.delete(nodeWorkingDirectory.value / "node_modules")
+        },
+        frontendCleanAll := {
+          IO.delete(nodeWorkingDirectory.value / ".frontend")
+          frontendCleanDeps.value
         },
         onLoad in Global := {
           val onLoadFunc = (s: State) => {
@@ -134,9 +144,8 @@ object FrontendPlugin extends AutoPlugin {
             }
 
             // npm install
-            val npmFile = nodeWorkingDirectory.value / "package.json"
-            if (npmFile.exists) {
-              runIfUpdated(npmFile) {
+            if (npmFile.value.exists) {
+              runIfUpdated(npmFile.value) {
                 Frontend.npm(
                   frontendFactory.value,
                   "install",
@@ -149,9 +158,8 @@ object FrontendPlugin extends AutoPlugin {
             }
 
             // bower install
-            val bowerFile = nodeWorkingDirectory.value / "bower.json"
-            if (bowerFile.exists) {
-              runIfUpdated(bowerFile) {
+            if (bowerFile.value.exists) {
+              runIfUpdated(bowerFile.value) {
                 Frontend.bower(
                   frontendFactory.value,
                   "install",

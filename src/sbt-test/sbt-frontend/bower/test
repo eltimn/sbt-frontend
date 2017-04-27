@@ -1,4 +1,11 @@
 > show nodeInstallDirectory
+$ exists node_modules/bower/bin/bower
 $ exists bower_components/jquery/dist/jquery.js
-> frontendClean
+> frontendCleanDeps
+$ absent .frontend/package.json.md5
+$ absent .frontend/bower.json.md5
+$ absent node_modules
 $ absent bower_components
+> reload
+$ exists node_modules/bower/bin/bower
+$ exists bower_components/jquery/dist/jquery.js
