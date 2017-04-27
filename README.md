@@ -65,7 +65,7 @@ myTask := gulp.toTask(" build").value
 
 This is equivalent to ```gulp build```.
 
-### Other Tasks
+#### Other Tasks
 
 | Task              | Description   |
 | -------------     | ------------- |
@@ -85,6 +85,12 @@ The following `FrontendKeys` are also available:
 | nodeDownloadRoot     | Where to download Node.js binary from |
 | npmDownloadRoot      | Where to download NPM binary from |
 | nodeProxies          | Seq of proxies for downloader |
+
+Example
+-------
+
+See the [lift-extras-example](https://github.com/eltimn/lift-extras-example) project for an example project that uses sbt-frontend.
+
 
 Credits
 -------
