@@ -1,0 +1,4 @@
+> yarn add lodash
+$ exists node_modules/lodash/add.js
+> yarn run check
+$ exists test.txt

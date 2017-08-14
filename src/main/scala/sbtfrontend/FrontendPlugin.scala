@@ -8,23 +8,31 @@ import scala.util.control.NonFatal
 
 import org.slf4j.impl.StaticLoggerBinder
 import net.liftweb.common.{ Failure, Full }
-import com.github.eirslett.maven.plugins.frontend.lib.{
-  FrontendPluginFactory, NodeInstaller, NPMInstaller, ProxyConfig
+import com.github.eirslett.maven.plugins.frontend.lib._
+
+object NodePackageManager extends Enumeration {
+  type NodePackageManager = Value
+  val NPM, Yarn = Value
 }
 
 object Defaults {
   val nodeVersion = "v6.10.1"
   val npmVersion = "3.10.10"
+  val yarnVersion = "v0.27.5"
   val nodeDownloadRoot = NodeInstaller.DEFAULT_NODEJS_DOWNLOAD_ROOT
   val npmDownloadRoot = NPMInstaller.DEFAULT_NPM_DOWNLOAD_ROOT
+  val yarnDownloadRoot = YarnInstaller.DEFAULT_YARN_DOWNLOAD_ROOT
   val npmRegistryUrl: Option[String] = None
+  val nodePackageManager = NodePackageManager.NPM
 }
 
 object FrontendPlugin extends AutoPlugin {
 
   object autoImport {
-    val nodeInstall = taskKey[Unit]("Installs node.js and npm locally.")
+    val nodeInstall = taskKey[Unit]("Installs node.js and npm/yarn locally.")
+    val nodePackageManager = settingKey[NodePackageManager.Value]("npm/yarn")
     val npm = inputKey[Unit]("Runs npm commands")
+    val yarn = inputKey[Unit]("Runs yarn commands")
     val bower = inputKey[Unit]("Runs bower commands")
     val grunt = inputKey[Unit]("Runs grunt commands")
     val gulp = inputKey[Unit]("Runs gulp commands")
@@ -40,10 +48,12 @@ object FrontendPlugin extends AutoPlugin {
       val frontendFactory = settingKey[FrontendPluginFactory]("The FrontendFactory instance")
       val nodeVersion = settingKey[String](s"The version of Node.js to install. Default: ${Defaults.nodeVersion}")
       val npmVersion = settingKey[String](s"The version of NPM to install. Default: ${Defaults.npmVersion}")
+      val yarnVersion = settingKey[String](s"The version of Yarn to install. Default: ${Defaults.yarnVersion}")
       val nodeInstallDirectory = settingKey[File](s"The base directory for installing node and npm. Default: baseDirectory/.frontend")
       val nodeWorkingDirectory = settingKey[File](s"The base directory for running node and npm. Default: baseDirectory")
       val nodeDownloadRoot = settingKey[String](s"Where to download Node.js binary from. Default: ${Defaults.nodeDownloadRoot}")
       val npmDownloadRoot = settingKey[String](s"Where to download NPM binary from. Default: ${Defaults.npmDownloadRoot}")
+      val yarnDownloadRoot = settingKey[String](s"Where to download Yarn binary from. Default: ${Defaults.yarnDownloadRoot}")
       val npmRegistryUrl = settingKey[Option[String]](s"NPM registry URL. Default: ${Defaults.npmRegistryUrl}")
       val nodeProxies = settingKey[Seq[ProxyConfig.Proxy]]("Seq of proxies for downloader.")
       val npmFile = settingKey[File]("package.json")
@@ -54,12 +64,15 @@ object FrontendPlugin extends AutoPlugin {
       import FrontendKeys._
 
       Seq(
+        nodePackageManager := Defaults.nodePackageManager,
         nodeVersion := Defaults.nodeVersion,
         npmVersion := Defaults.npmVersion,
+        yarnVersion := Defaults.yarnVersion,
         nodeInstallDirectory := baseDirectory.value / ".frontend",
         nodeWorkingDirectory := baseDirectory.value,
         nodeDownloadRoot := Defaults.nodeDownloadRoot,
         npmDownloadRoot := Defaults.npmDownloadRoot,
+        yarnDownloadRoot := Defaults.yarnDownloadRoot,
         npmRegistryUrl := Defaults.npmRegistryUrl,
         npmFile := nodeWorkingDirectory.value / "package.json",
         bowerFile := nodeWorkingDirectory.value / "bower.json",
@@ -71,10 +84,13 @@ object FrontendPlugin extends AutoPlugin {
           StaticLoggerBinder.sbtLogger = streams.value.log
           Frontend.nodeInstall(
             frontendFactory.value,
+            nodePackageManager.value,
             nodeVersion.value,
             npmVersion.value,
+            yarnVersion.value,
             nodeDownloadRoot.value,
             npmDownloadRoot.value,
+            yarnDownloadRoot.value,
             nodeProxies.value
           ) match {
             case Failure(msg, Full(e), _) => throw e
@@ -82,6 +98,7 @@ object FrontendPlugin extends AutoPlugin {
           }
         },
         npm <<= FrontendProxyInputTask(npm, Frontend.npm _),
+        yarn <<= FrontendProxyInputTask(yarn, Frontend.yarn _),
         bower <<= FrontendProxyInputTask(bower, Frontend.bower _),
         grunt <<= FrontendInputTask(grunt, Frontend.grunt _),
         gulp <<= FrontendInputTask(gulp, Frontend.gulp _),
@@ -111,13 +128,16 @@ object FrontendPlugin extends AutoPlugin {
           val onLoadFunc = (s: State) => {
             StaticLoggerBinder.sbtLogger = s.log
 
-            // install node and npm
+            // install node and npm/yarn
             Frontend.nodeInstall(
               frontendFactory.value,
+              nodePackageManager.value,
               nodeVersion.value,
               npmVersion.value,
+              yarnVersion.value,
               nodeDownloadRoot.value,
               npmDownloadRoot.value,
+              yarnDownloadRoot.value,
               nodeProxies.value
             ) match {
               case Failure(msg, Full(e), _) => throw e
@@ -143,16 +163,28 @@ object FrontendPlugin extends AutoPlugin {
               }
             }
 
-            // npm install
+            // npm/yarn install
             if (npmFile.value.exists) {
               runIfUpdated(npmFile.value) {
-                Frontend.npm(
-                  frontendFactory.value,
-                  "install",
-                  nodeProxies.value
-                ) match {
-                  case Failure(msg, Full(e), _) => throw e
-                  case _ =>
+                nodePackageManager.value match {
+                  case NodePackageManager.NPM =>
+                    Frontend.npm(
+                      frontendFactory.value,
+                      "install",
+                      nodeProxies.value
+                    ) match {
+                      case Failure(msg, Full(e), _) => throw e
+                      case _ =>
+                    }
+                  case NodePackageManager.Yarn =>
+                    Frontend.yarn(
+                      frontendFactory.value,
+                      "install",
+                      nodeProxies.value
+                    ) match {
+                      case Failure(msg, Full(e), _) => throw e
+                      case _ =>
+                    }
                 }
               }
             }

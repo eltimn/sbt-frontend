@@ -32,13 +32,18 @@ enablePlugins(FrontendPlugin)
 Usage
 -----
 
-Upon loading SBT, Node and npm with be automatically installed locally. Also, if `package.json` was modified since the last time SBT was loaded, `npm install` will be called. The same goes for `bower.json`, if it exists.
+Upon loading SBT, Node and npm/yarn with be automatically installed locally. Also, if `package.json` was modified since the last time SBT was loaded, `npm install` or `yarn install` will be called. The same goes for `bower.json`, if it exists.
 
-The plugin makes available the following `InputTask`s. Note that you must first install any apps you want to use with `npm install`.
+If you want to use Yarn instead of NPM, set the `nodePackageManager` setting in your build.sbt file:
+
+    nodePackageManager := sbtfrontend.NodePackageManager.Yarn
+
+The plugin makes available the following `InputTask`s. Note that you must first install any apps you want to use with `npm install` or `yarn add`.
 
 | Input Task    | Description   |
 | ------------- | ------------- |
 | npm           | Runs npm commands |
+| yarn          | Runs yarn commands |
 | bower         | Runs bower commands |
 | grunt         | Runs grunt commands |
 | gulp          | Runs gulp commands |
@@ -80,10 +85,12 @@ The following `FrontendKeys` are also available:
 | frontendFactory      | The FrontendFactory instance |
 | nodeVersion          | The version of Node.js to install |
 | npmVersion           | The version of NPM to install |
+| yarnVersion          | The version of Yarn to install |
 | nodeInstallDirectory | The base directory for installing node and npm |
 | nodeWorkingDirectory | The base directory for running node and npm |
 | nodeDownloadRoot     | Where to download Node.js binary from |
 | npmDownloadRoot      | Where to download NPM binary from |
+| yarnDownloadRoot     | Where to download Yarn binary from |
 | nodeProxies          | Seq of proxies for downloader |
 
 Example

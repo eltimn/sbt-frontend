@@ -25,10 +25,13 @@ object Frontend {
 
   def nodeInstall(
     factory: FrontendPluginFactory,
+    nodePackageManager: NodePackageManager.Value,
     nodeVersion: String,
     npmVersion: String,
+    yarnVersion: String,
     nodeDownloadRoot: String,
     npmDownloadRoot: String,
+    yarnDownloadRoot: String,
     proxies: Seq[ProxyConfig.Proxy]
   ): Box[Unit] = {
     tryo {
@@ -41,16 +44,28 @@ object Frontend {
         .setNpmVersion(npmVersion)
         .install()
 
-      factory.getNPMInstaller(proxyConfig)
-        .setNodeVersion(nodeVersion)
-        .setNpmVersion(npmVersion)
-        .setNpmDownloadRoot(npmDownloadRoot)
-        .install()
+      nodePackageManager match {
+        case NodePackageManager.NPM =>
+          factory.getNPMInstaller(proxyConfig)
+            .setNodeVersion(nodeVersion)
+            .setNpmVersion(npmVersion)
+            .setNpmDownloadRoot(npmDownloadRoot)
+            .install()
+
+        case NodePackageManager.Yarn =>
+          factory.getYarnInstaller(proxyConfig)
+            .setYarnVersion(yarnVersion)
+            .setYarnDownloadRoot(yarnDownloadRoot)
+            .install()
+      }
     }
   }
 
   def npm(factory: FrontendPluginFactory, arguments: String, proxies: Seq[ProxyConfig.Proxy]): Box[Unit] =
     tryo { factory.getNpmRunner(new ProxyConfig(proxies.asJava), null).execute(arguments, environmentVariables.asJava) }
+
+  def yarn(factory: FrontendPluginFactory, arguments: String, proxies: Seq[ProxyConfig.Proxy]): Box[Unit] =
+    tryo { factory.getYarnRunner(new ProxyConfig(proxies.asJava), null).execute(arguments, environmentVariables.asJava) }
 
   def bower(factory: FrontendPluginFactory, arguments: String, proxies: Seq[ProxyConfig.Proxy]): Box[Unit] =
     tryo { factory.getBowerRunner(new ProxyConfig(proxies.asJava)).execute(arguments, environmentVariables.asJava) }
