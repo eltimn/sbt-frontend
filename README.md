@@ -20,7 +20,7 @@ Setup
 Add the following to your _project/plugins.sbt_ file:
 
 ```scala
-addSbtPlugin("com.eltimn" % "sbt-frontend" % "0.2.3")
+addSbtPlugin("com.eltimn" % "sbt-frontend" % "0.3.0")
 ```
 
 Enable the plugin in your _build.sbt_ file with:
