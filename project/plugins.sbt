@@ -1,6 +1,6 @@
-addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "0.8.5")
+addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "0.9.3")
 
 libraryDependencies +=
-  "org.scala-sbt" % "scripted-plugin" % sbtVersion.value
+  "org.scala-sbt" %% "scripted-plugin" % sbtVersion.value
 
-addSbtPlugin("me.lessis" % "bintray-sbt" % "0.3.0")
+addSbtPlugin("org.foundweekends" % "sbt-bintray" % "0.5.1")
