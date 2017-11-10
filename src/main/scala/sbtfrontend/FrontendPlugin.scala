@@ -17,8 +17,8 @@ object NodePackageManager extends Enumeration {
 }
 
 object Defaults {
-  val nodeVersion = "v6.10.1"
-  val npmVersion = "3.10.10"
+  val nodeVersion = "v8.9.1"
+  val npmVersion = "5.5.1"
   val yarnVersion = "v0.27.5"
   val nodeDownloadRoot = NodeInstaller.DEFAULT_NODEJS_DOWNLOAD_ROOT
   val npmDownloadRoot = NPMInstaller.DEFAULT_NPM_DOWNLOAD_ROOT
