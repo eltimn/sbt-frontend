@@ -7,7 +7,7 @@ import complete.DefaultParsers._
 import java.util.jar.JarFile
 import scala.util.control.NonFatal
 
-import org.slf4j.impl.StaticLoggerBinder
+import org.slf4j.impl.SbtStaticLoggerBinder
 import net.liftweb.common.{ Failure, Full }
 import com.github.eirslett.maven.plugins.frontend.lib._
 
@@ -82,7 +82,7 @@ object FrontendPlugin extends AutoPlugin {
           new FrontendPluginFactory(nodeWorkingDirectory.value, nodeInstallDirectory.value)
         },
         nodeInstall := {
-          StaticLoggerBinder.sbtLogger = streams.value.log
+          SbtStaticLoggerBinder.sbtLogger = streams.value.log
           Frontend.nodeInstall(
             frontendFactory.value,
             nodePackageManager.value,
@@ -101,7 +101,7 @@ object FrontendPlugin extends AutoPlugin {
         npm := {
           val args = spaceDelimited("<arg>").parsed
           val log = streams.value.log
-          StaticLoggerBinder.sbtLogger = log
+          SbtStaticLoggerBinder.sbtLogger = log
           Frontend.npm(
             frontendFactory.value,
             args.mkString(" "),
@@ -114,7 +114,7 @@ object FrontendPlugin extends AutoPlugin {
         yarn := {
           val args = spaceDelimited("<arg>").parsed
           val log = streams.value.log
-          StaticLoggerBinder.sbtLogger = log
+          SbtStaticLoggerBinder.sbtLogger = log
           Frontend.yarn(
             frontendFactory.value,
             args.mkString(" "),
@@ -127,7 +127,7 @@ object FrontendPlugin extends AutoPlugin {
         bower := {
           val args = spaceDelimited("<arg>").parsed
           val log = streams.value.log
-          StaticLoggerBinder.sbtLogger = log
+          SbtStaticLoggerBinder.sbtLogger = log
           Frontend.bower(
             frontendFactory.value,
             args.mkString(" "),
@@ -140,7 +140,7 @@ object FrontendPlugin extends AutoPlugin {
         grunt := {
           val args = spaceDelimited("<arg>").parsed
           val log = streams.value.log
-          StaticLoggerBinder.sbtLogger = log
+          SbtStaticLoggerBinder.sbtLogger = log
           Frontend.grunt(frontendFactory.value, args.mkString(" ")) match {
             case Failure(msg, Full(e), _) => throw e
             case _ =>
@@ -149,7 +149,7 @@ object FrontendPlugin extends AutoPlugin {
         gulp := {
           val args = spaceDelimited("<arg>").parsed
           val log = streams.value.log
-          StaticLoggerBinder.sbtLogger = log
+          SbtStaticLoggerBinder.sbtLogger = log
           Frontend.gulp(frontendFactory.value, args.mkString(" ")) match {
             case Failure(msg, Full(e), _) => throw e
             case _ =>
@@ -158,7 +158,7 @@ object FrontendPlugin extends AutoPlugin {
         jspm := {
           val args = spaceDelimited("<arg>").parsed
           val log = streams.value.log
-          StaticLoggerBinder.sbtLogger = log
+          SbtStaticLoggerBinder.sbtLogger = log
           Frontend.jspm(frontendFactory.value, args.mkString(" ")) match {
             case Failure(msg, Full(e), _) => throw e
             case _ =>
@@ -167,7 +167,7 @@ object FrontendPlugin extends AutoPlugin {
         karma := {
           val args = spaceDelimited("<arg>").parsed
           val log = streams.value.log
-          StaticLoggerBinder.sbtLogger = log
+          SbtStaticLoggerBinder.sbtLogger = log
           Frontend.karma(frontendFactory.value, args.mkString(" ")) match {
             case Failure(msg, Full(e), _) => throw e
             case _ =>
@@ -176,7 +176,7 @@ object FrontendPlugin extends AutoPlugin {
         webpack := {
           val args = spaceDelimited("<arg>").parsed
           val log = streams.value.log
-          StaticLoggerBinder.sbtLogger = log
+          SbtStaticLoggerBinder.sbtLogger = log
           Frontend.webpack(frontendFactory.value, args.mkString(" ")) match {
             case Failure(msg, Full(e), _) => throw e
             case _ =>
@@ -185,7 +185,7 @@ object FrontendPlugin extends AutoPlugin {
         ember := {
           val args = spaceDelimited("<arg>").parsed
           val log = streams.value.log
-          StaticLoggerBinder.sbtLogger = log
+          SbtStaticLoggerBinder.sbtLogger = log
           Frontend.ember(frontendFactory.value, args.mkString(" ")) match {
             case Failure(msg, Full(e), _) => throw e
             case _ =>
@@ -211,7 +211,7 @@ object FrontendPlugin extends AutoPlugin {
         },
         onLoad in Global := {
           val onLoadFunc = (s: State) => {
-            StaticLoggerBinder.sbtLogger = s.log
+            SbtStaticLoggerBinder.sbtLogger = s.log
 
             // install node and npm/yarn
             Frontend.nodeInstall(

@@ -5,7 +5,7 @@ import scala.collection.JavaConverters._
 import java.io.File
 import java.util.jar.JarFile
 
-import net.liftweb.common._
+import net.liftweb.common.{Box, Empty, Failure, Full => LiftFull}
 import com.github.eirslett.maven.plugins.frontend.lib.{
   FrontendPluginFactory, ProxyConfig
 }
@@ -17,9 +17,9 @@ object Frontend {
 
   private def tryo[T](f: => T): Box[T] = {
     try {
-      Full(f)
+      LiftFull(f)
     } catch {
-      case e: Throwable => Failure(e.getMessage, Full(e), Empty)
+      case e: Throwable => Failure(e.getMessage, LiftFull(e), Empty)
     }
   }
 
