@@ -2,6 +2,7 @@ package sbtfrontend
 
 import sbt._
 import sbt.Keys._
+import complete.DefaultParsers._
 
 import java.util.jar.JarFile
 import scala.util.control.NonFatal
@@ -97,15 +98,99 @@ object FrontendPlugin extends AutoPlugin {
             case _ =>
           }
         },
-        npm <<= FrontendProxyInputTask(npm, Frontend.npm _),
-        yarn <<= FrontendProxyInputTask(yarn, Frontend.yarn _),
-        bower <<= FrontendProxyInputTask(bower, Frontend.bower _),
-        grunt <<= FrontendInputTask(grunt, Frontend.grunt _),
-        gulp <<= FrontendInputTask(gulp, Frontend.gulp _),
-        jspm <<= FrontendInputTask(jspm, Frontend.jspm _),
-        karma <<= FrontendInputTask(karma, Frontend.karma _),
-        webpack <<= FrontendInputTask(webpack, Frontend.webpack _),
-        ember <<= FrontendInputTask(ember, Frontend.ember _),
+        npm := {
+          val args = spaceDelimited("<arg>").parsed
+          val log = streams.value.log
+          StaticLoggerBinder.sbtLogger = log
+          Frontend.npm(
+            frontendFactory.value,
+            args.mkString(" "),
+            nodeProxies.value
+          ) match {
+            case Failure(msg, Full(e), _) => throw e
+            case _ =>
+          }
+        },
+        yarn := {
+          val args = spaceDelimited("<arg>").parsed
+          val log = streams.value.log
+          StaticLoggerBinder.sbtLogger = log
+          Frontend.yarn(
+            frontendFactory.value,
+            args.mkString(" "),
+            nodeProxies.value
+          ) match {
+            case Failure(msg, Full(e), _) => throw e
+            case _ =>
+          }
+        },
+        bower := {
+          val args = spaceDelimited("<arg>").parsed
+          val log = streams.value.log
+          StaticLoggerBinder.sbtLogger = log
+          Frontend.bower(
+            frontendFactory.value,
+            args.mkString(" "),
+            nodeProxies.value
+          ) match {
+            case Failure(msg, Full(e), _) => throw e
+            case _ =>
+          }
+        },
+        grunt := {
+          val args = spaceDelimited("<arg>").parsed
+          val log = streams.value.log
+          StaticLoggerBinder.sbtLogger = log
+          Frontend.grunt(frontendFactory.value, args.mkString(" ")) match {
+            case Failure(msg, Full(e), _) => throw e
+            case _ =>
+          }
+        },
+        gulp := {
+          val args = spaceDelimited("<arg>").parsed
+          val log = streams.value.log
+          StaticLoggerBinder.sbtLogger = log
+          Frontend.gulp(frontendFactory.value, args.mkString(" ")) match {
+            case Failure(msg, Full(e), _) => throw e
+            case _ =>
+          }
+        },
+        jspm := {
+          val args = spaceDelimited("<arg>").parsed
+          val log = streams.value.log
+          StaticLoggerBinder.sbtLogger = log
+          Frontend.jspm(frontendFactory.value, args.mkString(" ")) match {
+            case Failure(msg, Full(e), _) => throw e
+            case _ =>
+          }
+        },
+        karma := {
+          val args = spaceDelimited("<arg>").parsed
+          val log = streams.value.log
+          StaticLoggerBinder.sbtLogger = log
+          Frontend.karma(frontendFactory.value, args.mkString(" ")) match {
+            case Failure(msg, Full(e), _) => throw e
+            case _ =>
+          }
+        },
+        webpack := {
+          val args = spaceDelimited("<arg>").parsed
+          val log = streams.value.log
+          StaticLoggerBinder.sbtLogger = log
+          Frontend.webpack(frontendFactory.value, args.mkString(" ")) match {
+            case Failure(msg, Full(e), _) => throw e
+            case _ =>
+          }
+        },
+        ember := {
+          val args = spaceDelimited("<arg>").parsed
+          val log = streams.value.log
+          StaticLoggerBinder.sbtLogger = log
+          Frontend.ember(frontendFactory.value, args.mkString(" ")) match {
+            case Failure(msg, Full(e), _) => throw e
+            case _ =>
+          }
+        },
         webjars := {
           for {
             file <- (dependencyClasspath in Compile).value.map(_.data)
