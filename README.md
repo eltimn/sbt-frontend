@@ -20,6 +20,7 @@ Setup
 Add the following to your _project/plugins.sbt_ file:
 
 ```scala
+resolvers += Resolver.jcenterRepo
 addSbtPlugin("com.eltimn" % "sbt-frontend" % "1.0.0")
 ```
 

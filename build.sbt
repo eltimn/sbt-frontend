@@ -10,10 +10,10 @@ scalaVersion := "2.12.4"
 
 scalacOptions := Seq("-deprecation", "-unchecked")
 
-resolvers += Resolver.bintrayRepo("eltimn", "maven")
+resolvers += Resolver.jcenterRepo
 
 libraryDependencies ++= Seq(
-  "com.eltimn"          %% "sbt-slf4j"            % "1.0.1",
+  "com.eltimn"          %% "sbt-slf4j"            % "1.0.4",
   "com.github.eirslett" %  "frontend-plugin-core" % "1.3",
   "net.liftweb"         %% "lift-common"          % "3.1.1"
 )
