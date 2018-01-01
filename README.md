@@ -1,3 +1,5 @@
+**NOTE:** Logging does not work in the current released version, Everyting works but the logs are not displayed. This is due to sbt-slf4j not working properly. In order to make working on it easier, I've copied the files from sbt-slf4j directly into this project on branch *tcn_sbt1*. However, I have still not gotten it to work, so I've pretty much abandoned it. Please feel free to send a PR if you get it working.
+
 sbt-frontend
 ============
 
