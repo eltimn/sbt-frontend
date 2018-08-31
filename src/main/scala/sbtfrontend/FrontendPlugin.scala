@@ -25,6 +25,7 @@ object Defaults {
   val yarnDownloadRoot = YarnInstaller.DEFAULT_YARN_DOWNLOAD_ROOT
   val npmRegistryUrl: Option[String] = None
   val nodePackageManager = NodePackageManager.NPM
+  val nodePackageManagerInstallCmd = "install"
 }
 
 object FrontendPlugin extends AutoPlugin {
@@ -57,6 +58,7 @@ object FrontendPlugin extends AutoPlugin {
       val yarnDownloadRoot = settingKey[String](s"Where to download Yarn binary from. Default: ${Defaults.yarnDownloadRoot}")
       val npmRegistryUrl = settingKey[Option[String]](s"NPM registry URL. Default: ${Defaults.npmRegistryUrl}")
       val nodeProxies = settingKey[Seq[ProxyConfig.Proxy]]("Seq of proxies for downloader.")
+      val nodePackageManagerInstallCmd = settingKey[String](s"Node Package manager project installation command, triggered for every sbt boot if $npmFile has changed. Default: ${Defaults.nodePackageManagerInstallCmd}")
       val npmFile = settingKey[File]("package.json")
       val bowerFile = settingKey[File]("bower.json")
     }
@@ -66,6 +68,7 @@ object FrontendPlugin extends AutoPlugin {
 
       Seq(
         nodePackageManager := Defaults.nodePackageManager,
+        nodePackageManagerInstallCmd := Defaults.nodePackageManagerInstallCmd,
         nodeVersion := Defaults.nodeVersion,
         npmVersion := Defaults.npmVersion,
         yarnVersion := Defaults.yarnVersion,
@@ -255,7 +258,7 @@ object FrontendPlugin extends AutoPlugin {
                   case NodePackageManager.NPM =>
                     Frontend.npm(
                       frontendFactory.value,
-                      "install",
+                      nodePackageManagerInstallCmd.value,
                       nodeProxies.value
                     ) match {
                       case Failure(msg, Full(e), _) => throw e
@@ -264,7 +267,7 @@ object FrontendPlugin extends AutoPlugin {
                   case NodePackageManager.Yarn =>
                     Frontend.yarn(
                       frontendFactory.value,
-                      "install",
+                      nodePackageManagerInstallCmd.value,
                       nodeProxies.value
                     ) match {
                       case Failure(msg, Full(e), _) => throw e
