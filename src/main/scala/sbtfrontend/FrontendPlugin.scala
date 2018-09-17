@@ -58,7 +58,7 @@ object FrontendPlugin extends AutoPlugin {
       val yarnDownloadRoot = settingKey[String](s"Where to download Yarn binary from. Default: ${Defaults.yarnDownloadRoot}")
       val npmRegistryUrl = settingKey[Option[String]](s"NPM registry URL. Default: ${Defaults.npmRegistryUrl}")
       val nodeProxies = settingKey[Seq[ProxyConfig.Proxy]]("Seq of proxies for downloader.")
-      val nodePackageManagerInstallCmd = settingKey[String](s"Node Package manager project installation command, triggered for every sbt boot if $npmFile has changed. Default: ${Defaults.nodePackageManagerInstallCmd}")
+      val nodePackageManagerInstallCmd = settingKey[String](s"Node Package manager project installation command, triggered for every sbt boot if npmFile has changed. Default: ${Defaults.nodePackageManagerInstallCmd}")
       val npmFile = settingKey[File]("package.json")
       val bowerFile = settingKey[File]("bower.json")
     }
