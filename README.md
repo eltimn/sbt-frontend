@@ -97,6 +97,7 @@ The following `FrontendKeys` are also available:
 | npmDownloadRoot      | Where to download NPM binary from |
 | yarnDownloadRoot     | Where to download Yarn binary from |
 | nodeProxies          | Seq of proxies for downloader |
+| nodePackageManagerInstallCmd | Node Package manager project installation command |
 
 Example
 -------
