@@ -14,7 +14,7 @@ resolvers += Resolver.jcenterRepo
 
 libraryDependencies ++= Seq(
   "com.eltimn"          %% "sbt-slf4j"            % "1.0.4",
-  "com.github.eirslett" %  "frontend-plugin-core" % "1.3",
+  "com.github.eirslett" %  "frontend-plugin-core" % "1.6",
   "net.liftweb"         %% "lift-common"          % "3.1.1"
 )
 
