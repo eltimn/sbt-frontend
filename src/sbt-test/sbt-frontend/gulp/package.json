@@ -1,6 +1,6 @@
 {
   "private": true,
   "devDependencies": {
-    "gulp": "latest"
+    "gulp": "gulpjs/gulp#c6a89f79b69742538829e66c32ca57956518be63"
   }
 }
