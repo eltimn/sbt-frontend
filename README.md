@@ -23,7 +23,7 @@ Add the following to your _project/plugins.sbt_ file:
 
 ```scala
 resolvers += Resolver.jcenterRepo
-addSbtPlugin("com.eltimn" % "sbt-frontend" % "1.0.2")
+addSbtPlugin("com.eltimn" % "sbt-frontend" % "1.1.0")
 ```
 
 **Note:** if you're using an SBT version < 1.0.0, use v0.3.0 of this library.
